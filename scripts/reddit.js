@@ -3,15 +3,16 @@ const ffmpeg = require("fluent-ffmpeg");
 const mpdParser = require("mpd-parser");
 const axios = require("axios");
 const path = require("path");
+const fs = require("fs");
 
 ffmpeg.setFfmpegPath(ffmpegStatic);
 
 const { saveVideoFromURL } = require("../utils/saveVideoFromURL");
 const { findFieldValue } = require("../utils/findFieldValue");
 
-const REDDIT_VIDEO = "reddit_video";
-const REDDIT_AUDIO = "reddit_audio";
-const REDDIT_MERGED = "reddit";
+const REDDIT_VIDEO_PATH = "../files/reddit_video.mp4";
+const REDDIT_AUDIO_PATH = "../files/reddit_audio.mp4";
+const REDDIT_MERGED_PATH = "../files/reddit.mp4";
 
 const downloadReddit = async (inputValue) => {
   const response = await axios.get(`${inputValue}.json`);
@@ -25,17 +26,21 @@ const downloadReddit = async (inputValue) => {
 
   const audioURL = findFieldValue(parsedManifest, "playlists")[0].resolvedUri;
 
-  await saveVideoFromURL(downloadURL, path.join(__dirname, `../files/${REDDIT_VIDEO}.mp4`));
-  await saveVideoFromURL(audioURL, path.join(__dirname, `../files/${REDDIT_AUDIO}.mp4`));
+  await saveVideoFromURL(downloadURL, path.join(__dirname, REDDIT_VIDEO_PATH));
+  await saveVideoFromURL(audioURL, path.join(__dirname, REDDIT_AUDIO_PATH));
 
   await ffmpeg()
-    .addInput(path.resolve(__dirname, `../files/${REDDIT_VIDEO}.mp4`))
-    .addInput(path.resolve(__dirname, `../files/${REDDIT_AUDIO}.mp4`))
-    .addOptions(["-map 0:v", "-map 1:a", "-c:v copy"])
-    .format("mp4")
+    .addInput(path.resolve(__dirname, REDDIT_VIDEO_PATH))
+    .addInput(path.resolve(__dirname, REDDIT_AUDIO_PATH))
+    .withVideoCodec("copy")
+    .withAudioCodec("copy")
+    .saveToFile(path.join(__dirname, REDDIT_MERGED_PATH))
     .on("error", (error) => console.log("Merging failed:", error))
-    .on("end", () => console.log("Merging finished"))
-    .saveToFile(path.join(__dirname, `../files/${REDDIT_MERGED}.mp4`));
+    .on("end", () => {
+      fs.unlink(path.resolve(__dirname, REDDIT_VIDEO_PATH), () => {});
+      fs.unlink(path.resolve(__dirname, REDDIT_AUDIO_PATH), () => {});
+      console.log("Merging finished");
+    });
 };
 
 exports.downloadReddit = downloadReddit;
