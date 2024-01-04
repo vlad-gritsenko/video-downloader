@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-var cors = require('cors')
-
+var cors = require("cors");
+const axios = require("axios");
 
 const { downloadReddit } = require("./scripts/reddit.js");
 
@@ -27,16 +27,26 @@ app.get("/", (req, res) => {
 });
 
 app.post("/download", async (req, res) => {
-  const inputValue = req.body.url;
+  // const inputValue = req.body.url;
 
-  await downloadReddit(inputValue);
+  // await downloadReddit(inputValue);
 
-  res.json({ ready: true });
+  try {
+    const data = await axios.get(
+      `https://www.reddit.com/r/CrazyFuckingVideos/comments/18y4oxn/irl_streamer_swatted_while_drunk_streaming_hes_so/.json`
+    );
+    console.log("DDATA", data);
+  } catch (e) {
+    console.log("EERROR", e);
+  }
+
+  res.render("reddit.ejs");
+  // res.json({ ready: true });
   // res.render("download.ejs", {
   //   downloadURL: 'reddit.mp4'
   // });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`App listening on port ${PORT}`);
 });

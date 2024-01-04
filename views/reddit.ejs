@@ -19,7 +19,7 @@
     <main id="reddit-page">
       <h1>Download video from <b>Reddit</b></h1>
 
-      <form>
+      <form action="/download" method="post">
         <input
           type="text"
           id="inputValue"
@@ -37,7 +37,7 @@
       </div>
     </main>
   </body>
-  <script>
+  <!-- <script>
     document.querySelector("form").addEventListener("submit", (e) => {
       e.preventDefault();
 
@@ -67,5 +67,5 @@
           document.querySelector(".download-error").style.display = "block";
         });
     });
-  </script>
+  </script> -->
 </html>
