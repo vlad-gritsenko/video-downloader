@@ -6,7 +6,7 @@ var cors = require('cors')
 const { downloadReddit } = require("./scripts/reddit.js");
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.engine("html", require("ejs").renderFile);
 
@@ -37,6 +37,6 @@ app.post("/download", async (req, res) => {
   // });
 });
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`App listening on port ${PORT}`);
 });
