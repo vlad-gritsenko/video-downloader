@@ -1,4 +1,3 @@
-const bodyParser = require("body-parser");
 const express = require("express");
 
 const { downloadReddit } = require("./scripts/reddit.js");
@@ -12,26 +11,25 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 app.use(express.static("files"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.use(express.json());
 
 /*
  * API
  */
 app.get("/", (req, res) => {
   console.log(req.body);
-  res.render("reddit.html");
+  res.render("reddit.ejs");
 });
 
 app.post("/download", async (req, res) => {
-  const inputValue = req.body.inputValue;
+  const inputValue = req.body.url;
 
   await downloadReddit(inputValue);
 
-  res.render("download.html", {
-    downloadURL: "reddit.mp4",
-  });
+  res.json({ ready: true });
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening on port ${port}`);
 });

@@ -1,0 +1,104 @@
+/* Common */
+
+* {
+  font-family: "Bricolage Grotesque";
+}
+
+body {
+  background-color: #222;
+  color: #fff;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+header a {
+  display: inline-block;
+}
+
+main {
+  margin-top: 42px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: none;
+  color: #fff;
+}
+
+form {
+  display: flex;
+  max-width: 964px;
+  width: 100%;
+}
+
+form input {
+  padding: 12px;
+  width: 100%;
+  font-size: 16px;
+}
+
+form button {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.result {
+  margin-top: 48px;
+}
+
+.loader {
+  display: none;
+  width: 48px;
+  height: 48px;
+  border: 5px solid #fff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.download-button {
+  display: none;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px;
+  background-color: #ff6314;
+}
+
+.download-error {
+  display: none;
+}
+
+/* Reddit */
+
+#reddit-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#reddit-page h1 b {
+  color: #ff6314;
+}
+
+#reddit-page form button {
+  color: #fff;
+  background-color: #ff6314;
+  border: none;
+}

@@ -1,0 +1,66 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,700&display=swap" rel="stylesheet">
+    <title>Download Video From Reddit</title>
+  </head>
+  <body>
+    <%- include('./navigation.ejs') %>
+
+    <main id="reddit-page">
+      <h1>Download video from <b>Reddit</b></h1>
+
+      <form>
+        <input
+          type="text"
+          id="inputValue"
+          name="inputValue"
+          placeholder="Paste Reddit URL e.g. https://www.reddit.com/r/Damnthatsinteresting/comments/18y4rfo/tsunami_in_the_making/"
+          required
+        />
+        <button type="submit">Submit</button>
+      </form>
+
+      <div class="result">
+        <span class="loader"></span>
+        <a class="download-button" href="/reddit.mp4" download="/reddit.mp4" target="_blank">Download Reddit Video</a>
+        <p class="download-error">Unable to download video. Please try again</p>
+      </div>
+    </main>
+  </body>
+  <script>
+    document.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const inputValue = document.querySelector("#inputValue").value;
+
+      document.querySelector(".loader").style.display = "block";
+      document.querySelector(".download-button").style.display = "none";
+      document.querySelector(".download-error").style.display = "none";
+
+      fetch("/download", {
+        method: "POST",
+        body: JSON.stringify({ url: inputValue }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.ready) {
+            document.querySelector(".loader").style.display = "none";
+            document.querySelector(".download-button").style.display = "block";
+          }
+        })
+        .catch(() => {
+          document.querySelector(".download-error").style.display = "block";
+        })
+    });
+  </script>
+</html>
