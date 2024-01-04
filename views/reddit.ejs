@@ -5,9 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,700&display=swap"
+      rel="stylesheet"
+    />
     <title>Download Video From Reddit</title>
   </head>
   <body>
@@ -58,9 +61,11 @@
             document.querySelector(".download-button").style.display = "block";
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          document.querySelector(".loader").style.display = "none";
+          document.querySelector(".download-button").style.display = "none";
           document.querySelector(".download-error").style.display = "block";
-        })
+        });
     });
   </script>
 </html>

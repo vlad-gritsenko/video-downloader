@@ -1,4 +1,7 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+var cors = require('cors')
+
 
 const { downloadReddit } = require("./scripts/reddit.js");
 
@@ -10,15 +13,16 @@ app.engine("html", require("ejs").renderFile);
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
+app.use(cors());
 app.use(express.static("files"));
 app.use(express.static("public"));
 app.use(express.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 /*
  * API
  */
 app.get("/", (req, res) => {
-  console.log(req.body);
   res.render("reddit.ejs");
 });
 
@@ -28,8 +32,11 @@ app.post("/download", async (req, res) => {
   await downloadReddit(inputValue);
 
   res.json({ ready: true });
+  // res.render("download.ejs", {
+  //   downloadURL: 'reddit.mp4'
+  // });
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
 });
