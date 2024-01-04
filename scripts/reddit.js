@@ -15,10 +15,11 @@ const REDDIT_AUDIO_PATH = "../files/reddit_audio.mp4";
 const REDDIT_MERGED_PATH = "../files/reddit.mp4";
 
 const downloadReddit = async (inputValue) => {
-  const response = await axios.get(`${inputValue}.json`);
-  const downloadURL = response.data[0].data.children[0].data.secure_media.reddit_video.fallback_url;
+  // const response = await axios.get(`${inputValue}.json`);
+  // const downloadURL = response.data[0].data.children[0].data.secure_media.reddit_video.fallback_url;
   const mpdURL = `https://v.redd.it/${downloadURL.split("/")[3]}/DASHPlaylist.mpd`;
   const mpd = await axios.get(mpdURL);
+  console.log('mpd', mpd);
 
   const parsedManifest = mpdParser.parse(mpd.data, {
     manifestUri: mpdURL,
