@@ -2,10 +2,16 @@ const ffmpegStatic = require("ffmpeg-static");
 const ffmpeg = require("fluent-ffmpeg");
 const mpdParser = require("mpd-parser");
 const axios = require("axios");
+const axiosSupport = require('axios-cookiejar-support');
+const tough = require('tough-cookie');
+const random_ua = require('modern-random-ua');
 const path = require("path");
 const fs = require("fs");
 
 ffmpeg.setFfmpegPath(ffmpegStatic);
+
+const jar = new tough.CookieJar();
+const client = axiosSupport.wrapper(axios.create({ jar }));
 
 const { saveVideoFromURL } = require("../utils/saveVideoFromURL");
 const { findFieldValue } = require("../utils/findFieldValue");
@@ -15,11 +21,14 @@ const REDDIT_AUDIO_PATH = "../files/reddit_audio.mp4";
 const REDDIT_MERGED_PATH = "../files/reddit.mp4";
 
 const downloadReddit = async (inputValue) => {
-  // const response = await axios.get(`${inputValue}.json`);
-  // const downloadURL = response.data[0].data.children[0].data.secure_media.reddit_video.fallback_url;
+  const response = await client.get(`${inputValue}.json`, {
+    headers: {
+      'User-Agent':random_ua.generate(),
+    },
+  });
+  const downloadURL = response.data[0].data.children[0].data.secure_media.reddit_video.fallback_url;
   const mpdURL = `https://v.redd.it/${downloadURL.split("/")[3]}/DASHPlaylist.mpd`;
-  const mpd = await axios.get(mpdURL);
-  console.log('mpd', mpd);
+  const mpd = await client.get(mpdURL);
 
   const parsedManifest = mpdParser.parse(mpd.data, {
     manifestUri: mpdURL,

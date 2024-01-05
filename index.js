@@ -15,8 +15,8 @@ app.set("view engine", "ejs");
 app.use(cors());
 app.use(express.static("files"));
 app.use(express.static("public"));
-// app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 /*
  * API
@@ -26,13 +26,15 @@ app.get("/", (req, res) => {
 });
 
 app.post("/download", async (req, res) => {
-  const inputValue = req.body.inputValue;
+  // const inputValue = req.body.inputValue;
+  const inputValue = req.body.url;
 
   await downloadReddit(inputValue);
 
-  res.render("download.ejs", {
-    downloadURL: 'reddit.mp4'
-  });
+  res.send({ ready: true });
+  // res.render("download.ejs", {
+  //   downloadURL: 'reddit.mp4'
+  // });
 });
 
 app.listen(PORT, "0.0.0.0", () => {

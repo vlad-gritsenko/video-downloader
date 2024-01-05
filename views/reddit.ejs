@@ -5,12 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,700&display=swap"
       rel="stylesheet"
-    /> -->
+    />
     <title>Download Video From Reddit</title>
   </head>
   <body>
@@ -19,7 +19,8 @@
     <main id="reddit-page">
       <h1>Download video from <b>Reddit</b></h1>
 
-      <form action="/download" method="post">
+      <h2>https://www.reddit.com/r/maybemaybemaybe/comments/18yxizb/maybe_maybe_maybe/</h2>
+      <form>
         <input
           type="text"
           id="inputValue"
@@ -30,14 +31,14 @@
         <button type="submit">Submit</button>
       </form>
 
-      <!-- <div class="result">
+      <div class="result">
         <span class="loader"></span>
         <a class="download-button" href="/reddit.mp4" download="/reddit.mp4" target="_blank">Download Reddit Video</a>
         <p class="download-error">Unable to download video. Please try again</p>
-      </div> -->
+      </div>
     </main>
   </body>
-  <!-- <script>
+  <script>
     document.querySelector("form").addEventListener("submit", (e) => {
       e.preventDefault();
 
@@ -47,12 +48,13 @@
       document.querySelector(".download-button").style.display = "none";
       document.querySelector(".download-error").style.display = "none";
 
+      console.log('inputValue', inputValue);
       fetch("/download", {
         method: "POST",
         body: JSON.stringify({ url: inputValue }),
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
         .then((res) => res.json())
         .then((res) => {
@@ -67,5 +69,5 @@
           document.querySelector(".download-error").style.display = "block";
         });
     });
-  </script> -->
+  </script>
 </html>
