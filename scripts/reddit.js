@@ -2,11 +2,13 @@ const ffmpegStatic = require("ffmpeg-static");
 const ffmpeg = require("fluent-ffmpeg");
 const mpdParser = require("mpd-parser");
 const axios = require("axios");
-const axiosSupport = require('axios-cookiejar-support');
-const tough = require('tough-cookie');
-const random_ua = require('modern-random-ua');
+const axiosSupport = require("axios-cookiejar-support");
+const tough = require("tough-cookie");
+const random_ua = require("modern-random-ua");
 const path = require("path");
 const fs = require("fs");
+const nodeFetch = require("node-fetch");
+const proxyAgent = require("https-proxy-agent");
 
 ffmpeg.setFfmpegPath(ffmpegStatic);
 
@@ -21,11 +23,19 @@ const REDDIT_AUDIO_PATH = "../files/reddit_audio.mp4";
 const REDDIT_MERGED_PATH = "../files/reddit.mp4";
 
 const downloadReddit = async (inputValue) => {
-  const response = await client.get(`${inputValue}.json`, {
+  const proxy = new proxyAgent.HttpsProxyAgent("111.20.217.178:9091");
+
+  const response = await nodeFetch.fetch(`${inputValue}.json`, {
+    agent: proxy,
     headers: {
-      'User-Agent':random_ua.generate(),
+      "User-Agent": random_ua.generate(),
     },
   });
+  // const response = await client.get(`${inputValue}.json`, {
+  //   headers: {
+  //     "User-Agent": random_ua.generate(),
+  //   },
+  // });
   const downloadURL = response.data[0].data.children[0].data.secure_media.reddit_video.fallback_url;
   const mpdURL = `https://v.redd.it/${downloadURL.split("/")[3]}/DASHPlaylist.mpd`;
   const mpd = await client.get(mpdURL);
